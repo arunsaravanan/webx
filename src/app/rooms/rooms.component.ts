@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { GetRooms, selectedRooms } from '../store/rooms';
 import * as fromStore from './../store';
+import { Spinner } from '../store/spinner';
 
 @Component({
   selector: 'app-rooms',
@@ -15,6 +16,7 @@ export class RoomsComponent implements OnInit {
   rooms$ = this.store.select(selectedRooms);
 
   ngOnInit(): void {
+    this.store.dispatch(new Spinner({isLoading: true}));
     this.rooms$ = this.store.pipe(select(fromStore.selectedRooms));
     this.store.dispatch(new GetRooms());
   }

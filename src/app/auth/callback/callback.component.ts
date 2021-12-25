@@ -5,6 +5,7 @@ import { LoginSuccess } from './../../store/auth';
 import { AuthService } from './../../services/auth.service';
 import * as fromStore from './../../store';
 import { selectAuthState  } from './../../store/auth';
+import { Spinner } from './../../store/spinner';
 
 @Component({
   selector: 'app-callback',
@@ -22,6 +23,7 @@ export class CallbackComponent implements OnInit {
   isAuthenticated$ = this.store.select(selectAuthState);
 
   ngOnInit(): void {
+    this.store.dispatch(new Spinner({isLoading: true}));
     const token = this.route.snapshot.queryParamMap.get('code') || '';
     this.authService.authorize(token);
     this.store.dispatch(new LoginSuccess());

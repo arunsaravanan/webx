@@ -20,7 +20,7 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   { 
-    path: '', pathMatch: 'full', 
+    path: '**', pathMatch: 'full', 
     redirectTo: '/login' 
   },
   {

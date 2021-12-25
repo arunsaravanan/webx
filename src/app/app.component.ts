@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromStore from './store';
-import { AuthCheck } from './store';
+import { AuthCheck, selectAuthState, spinnerState } from './store';
 
 @Component({
   selector: 'app-root',
@@ -14,9 +14,9 @@ export class AppComponent {
   (
     private store:Store<fromStore.State>
   ) { }
-  //isAuthenticated$ = this.store.select(selectAuthState);
+  
+  isLoading$ = this.store.select(spinnerState);
 
   ngOnInit(): void {
-    this.store.dispatch(new AuthCheck());
   }
 }

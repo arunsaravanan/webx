@@ -4,6 +4,7 @@ import { MessagesService } from "./../../services/messages.service";
 import { MessagesActions, MessagesActionTypes } from ".";
 import * as fromMessageActions from './messages.actions';
 import { map, switchMap } from "rxjs/operators";
+import * as fromSpinnerActions from './../spinner/spinner.actions';
 
 @Injectable()
 export class MessagesEffects {
@@ -17,9 +18,10 @@ export class MessagesEffects {
                     this.messagesService
                         .getMessages(data.payload.room)
                         .pipe(
-                            map((messages) => {
-                                return new fromMessageActions.GetMessagesCompleted({ messages })
-                            })
+                            switchMap((messages) => [
+                                new fromSpinnerActions.Spinner({ isLoading: false }),
+                                new fromMessageActions.GetMessagesCompleted({ messages })
+                            ])
                         )
                 )
             )

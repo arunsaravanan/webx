@@ -3,6 +3,8 @@ import { select, Store } from '@ngrx/store';
 import { GetRooms, selectedRooms } from '../store/rooms';
 import * as fromStore from './../store';
 import { Spinner } from '../store/spinner';
+import { AuthCheck } from './../store/auth';
+import { PreviousRouteService } from '../services/previous.route.service';
 
 @Component({
   selector: 'app-rooms',
@@ -11,14 +13,26 @@ import { Spinner } from '../store/spinner';
 })
 export class RoomsComponent implements OnInit {
 
-  constructor(private store:Store<fromStore.State>) { }
+  constructor(
+    private store:Store<fromStore.State>,
+    private previousRouteService: PreviousRouteService
+    ) { }
 
   rooms$ = this.store.select(selectedRooms);
 
   ngOnInit(): void {
     this.store.dispatch(new Spinner({isLoading: true}));
+    console.log('previous URL', this.previousRouteService.getPreviousUrl());
+    if(this.previousRouteService.getPreviousUrl() == '/messages')
+    {
+      this.store.dispatch(new AuthCheck());
+      this.store.dispatch(new GetRooms());
+    }
+    else
+    {
+      this.store.dispatch(new GetRooms());
+    }    
     this.rooms$ = this.store.pipe(select(fromStore.selectedRooms));
-    this.store.dispatch(new GetRooms());
   }
 
 }

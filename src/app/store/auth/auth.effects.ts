@@ -52,7 +52,7 @@ export class AuthEffects {
             )
     );
 
-    loginSuccess$ = createEffect(
+    /* loginSuccess$ = createEffect(
         () =>
             this.actions$.pipe(
                 ofType(AuthActionTypes.LoginSuccess),
@@ -69,7 +69,7 @@ export class AuthEffects {
                             }))
                 )
             )
-    )
+    ) */
 
     loginComplete$ = createEffect(
         () =>

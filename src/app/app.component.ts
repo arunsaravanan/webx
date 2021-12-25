@@ -9,12 +9,12 @@ import { AuthCheck, selectAuthState, spinnerState } from './store';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'ng-oidc';
+  title = 'Web Squad';
   constructor
   (
     private store:Store<fromStore.State>
   ) { }
-  
+
   isLoading$ = this.store.select(spinnerState);
 
   ngOnInit(): void {

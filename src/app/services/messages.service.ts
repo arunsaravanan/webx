@@ -11,13 +11,10 @@ import { take } from 'rxjs/operators';
 })
 export class MessagesService {
 
-  //room$ = new Subject<any>();//this.store.pipe(select(selectedActiveRoom));
   constructor(
     private http: HttpClient,
     private store: Store<fromStore.State>
-  ) {
-    //this.room$ = this.store.pipe(select(selectedActiveRoom));
-  }
+  ) {}
 
   getMessages(room: any) {
     console.log(room);
@@ -35,15 +32,4 @@ export class MessagesService {
 
     return state;
   }
-
-  /* getRoom() {
-    return this.store.
-      pipe(
-        select(selectedActiveRoom))
-      .pipe(
-        take(1))
-      .subscribe(
-        state => state.activeRoom.id
-      )
-  } */
 }

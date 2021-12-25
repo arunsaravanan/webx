@@ -14,6 +14,7 @@ import { environment } from 'src/environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AuthInterceptor } from './services/auth.interceptor';
 import { TimeagoModule } from 'ngx-timeago';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { TimeagoModule } from 'ngx-timeago';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     AppRoutingModule,
     HttpClientModule,
     StoreModule.forRoot(appReducer),

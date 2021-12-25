@@ -1,0 +1,19 @@
+<form class="form-signin">
+    <img class="mb-4" src="assets/webex-seeklogo.com.svg" alt="" width="282" height="78">
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <div class="checkbox mb-3">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="flowType" id="implicit" value="implicit">
+            <label class="form-check-label" for="implicit">
+            Implicit Grant
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="flowType" id="code" value="code" checked>
+            <label class="form-check-label" for="code">
+            Code Grant
+            </label>
+        </div>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="button" (click)="submit()">Sign in</button>
+  </form>

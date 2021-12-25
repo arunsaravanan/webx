@@ -1,0 +1,11 @@
+.input-group-text {
+    height: 38px;
+}
+.input-group-mail-left {
+    text-align: left;
+    height: 32px;
+}
+.input-group-mail-right {
+    text-align: right;
+    height: 32px;
+}

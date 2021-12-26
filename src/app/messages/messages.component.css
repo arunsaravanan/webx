@@ -1,11 +1,32 @@
 .input-group-text {
     height: 38px;
+    text-decoration: none;
 }
-.input-group-mail-left {
-    text-align: left;
-    height: 32px;
+.other-message {
+    width: -webkit-fill-available;
 }
-.input-group-mail-right {
-    text-align: right;
-    height: 32px;
+.other-message:hover {
+    cursor: pointer;
+    background: #c4d7db;
+}
+.other-message:hover:after {
+    border-bottom-color:#c4d7db
+}
+.chat-history {
+    overflow-y: scroll;
+    width: 74.9%;
+    height: 78%;
+    position: absolute;
+}
+.chat-history ul{
+    display: flex;
+    flex-direction: column-reverse;
+}
+.chat-app {
+    height: 94%;
+    position: fixed;
+    width: 82%;
+}
+.chat-message {
+    margin-top: 56%;
 }

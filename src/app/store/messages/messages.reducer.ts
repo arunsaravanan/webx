@@ -16,6 +16,8 @@ export function messagesReducer(state = initialMessagesState, action: MessagesAc
             return state;
         case MessagesActionTypes.GetMessagesCompleted:
             return {...state, messages: action.payload.messages.items};
+        case MessagesActionTypes.CreateMessage:
+            return state;
         default:
             return state;
     }

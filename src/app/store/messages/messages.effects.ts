@@ -3,12 +3,15 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { MessagesService } from "./../../services/messages.service";
 import { MessagesActions, MessagesActionTypes } from ".";
 import * as fromMessageActions from './messages.actions';
-import { map, switchMap } from "rxjs/operators";
+import { first, map, mapTo, switchMap, tap } from "rxjs/operators";
 import * as fromSpinnerActions from './../spinner/spinner.actions';
+import * as fromStore from './../index';
+import { select, State, Store } from "@ngrx/store";
+import { selectedActiveRoom } from "../rooms";
 
 @Injectable()
 export class MessagesEffects {
-    constructor(private actions$: Actions<MessagesActions>, private messagesService: MessagesService) { }
+    constructor(private store: Store<fromStore.State>, private actions$: Actions<MessagesActions>, private messagesService: MessagesService) { }
 
     getMessages$ = createEffect(
         () =>
@@ -26,4 +29,46 @@ export class MessagesEffects {
                 )
             )
     );
+
+    createMessage$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(MessagesActionTypes.CreateMessage),
+                switchMap((data) =>
+                    this.messagesService
+                        .createMessage(data.payload.message)
+                        .pipe(
+                            switchMap(() =>
+                                this.store
+                                    .select(selectedActiveRoom)
+                                    .pipe(
+                                        map((value) => {
+                                            return new fromMessageActions.GetMessages({ room: value })
+                                        })
+                                    ))
+                        )
+                )
+            )
+    )
+
+    deleteMessage$ = createEffect(
+        () =>
+            this.actions$.pipe(
+                ofType(MessagesActionTypes.DeleteMessage),
+                switchMap((data) =>
+                    this.messagesService
+                        .deleteMessage(data.payload.message)
+                        .pipe(
+                            switchMap(() =>
+                                this.store
+                                    .select(selectedActiveRoom)
+                                    .pipe(
+                                        map((value) => {
+                                            return new fromMessageActions.GetMessages({ room: value })
+                                        })
+                                    ))
+                        )
+                )
+            )
+    )
 }

@@ -4,7 +4,7 @@ export enum MessagesActionTypes {
     GetMessages = '[Messages] GetMessages',
     GetMessagesCompleted = '[Messages] GetMessagesCompleted',
     CreateMessage = '[Messages] CreateMessage',
-    CreateMessageCompleted = '[Messages] CreateMessageCompleted'
+    DeleteMessage = '[Messages] DeleteMessage'
 }
 
 export class GetMessages implements Action {
@@ -20,14 +20,16 @@ export class GetMessagesCompleted implements Action {
 
 export class CreateMessage implements Action {
     readonly type = MessagesActionTypes.CreateMessage;
+    constructor(public payload: { message: any }) { }
 }
 
-export class CreateMessageCompleted implements Action {
-    readonly type = MessagesActionTypes.CreateMessageCompleted;
+export class DeleteMessage implements Action {
+    readonly type = MessagesActionTypes.DeleteMessage;
+    constructor(public payload: { message: any }) { }
 }
 
 export type MessagesActions = 
   | GetMessages
   | GetMessagesCompleted
   | CreateMessage 
-  | CreateMessageCompleted;
+  | DeleteMessage;

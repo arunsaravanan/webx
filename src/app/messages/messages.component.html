@@ -3,13 +3,6 @@
         <div class="row">
             <div class="col-lg-11">
                 <h3>Messages</h3>
-                <!-- <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
-                    <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar">
-                </a>
-                <div class="chat-about">
-                    <h6 class="m-b-0">Aiden Chavez</h6>
-                    <small>Last seen: 2 hours ago</small>
-                </div> -->
             </div>
             <div class="col-lg-1 hidden-sm text-right">
                 <a href="javascript:void(0);" class="btn btn-outline-secondary" (click)="logout()"><i
@@ -17,18 +10,17 @@
             </div>
         </div>
     </div>
-    <div class="chat-history">
+    <div #scrollContent (scroll)="onScroll()" class="chat-history">
         <ul class="m-b-0">
             <ng-container *ngIf="messages$ | async as messages">
                 <li *ngFor="let message of messages" class="clearfix">
                     <div class="badge bg-secondary message-data float-right">
                         {{message.personEmail}}
                     </div>
-                    <div class="message other-message float-right">{{message.text}}
+                    <div class="message other-message float-right" (click)="deleteMessage(message)">{{message.text}}
                     </div>
                     <div class="message-data text-right">
                         <span class="message-data-time float-right">{{message.created | timeago}}</span>
-                        <!-- <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar"> -->
                     </div>
                 </li>
             </ng-container>
@@ -57,9 +49,9 @@
     <div class="chat-message clearfix">
         <div class="input-group mb-0">
             <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fa fa-send"></i></span>
+                <a href="javascript:void(0)" (click)="createMessage()" class="input-group-text"><i class="fa fa-send"></i></a>
             </div>
-            <input type="text" class="form-control" placeholder="Enter text here...">
+            <input type="text" class="form-control" [(ngModel)]="textMessage" (keyup.enter)="createMessage()" placeholder="Enter text here...">
         </div>
     </div>
 </div>

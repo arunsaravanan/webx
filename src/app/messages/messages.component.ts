@@ -5,6 +5,7 @@ import { Logout } from '../store/auth';
 import { Spinner } from '../store/spinner';
 import { CreateMessage, DeleteMessage, selectedMessages } from '../store/messages';
 import * as fromStore from './../store';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-messages',
@@ -18,14 +19,18 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
 
   textMessage: string = "";
   constructor(
-    private store: Store<fromStore.State>,
-    private router: Router) { }
+      private store: Store<fromStore.State>,
+      private router: Router,
+      private toastr: ToastrService
+    ) { }
 
   messages$ = this.store.select(selectedMessages);
 
   ngOnInit(): void {
+
     this.messages$ = this.store.pipe(select(fromStore.selectedMessages));
     this.scrollToBottom();
+    this.toastr.success('Logged in successfully!', 'Webex Messages', { closeButton: true });
   }
 
   createMessage() {

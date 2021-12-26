@@ -17,11 +17,11 @@ export class AuthService {
     return this.loginCheck();
   }
   get token() {
-    return localStorage.getItem("access_token");
+    return this.getLocalStorageItem("access_token");
   }
 
   get tokenType() {
-    return localStorage.getItem("token_type");
+    return this.getLocalStorageItem("token_type");
   }
 
   login() {
@@ -32,12 +32,12 @@ export class AuthService {
   }
 
   loginCheck():Observable<any> {
-    if(localStorage.getItem('access_token')){
+    if(this.getLocalStorageItem('access_token')){
     let time = Date.now();
-    let accessTokenExpiry = time + Number(localStorage.getItem('expires_in'));
-    let refreshTokenExpiry = time + Number(localStorage.getItem('refresh_token_expires_in'));
+    let accessTokenExpiry = time + Number(this.getLocalStorageItem('expires_in'));
+    let refreshTokenExpiry = time + Number(this.getLocalStorageItem('refresh_token_expires_in'));
       if(time > refreshTokenExpiry){
-        localStorage.setItem(this._authFlag, JSON.stringify(false));
+        this.addOrRemoveLocalStorage(this._authFlag, JSON.stringify(false));
         this.clearSession();
       }
       else if(time > accessTokenExpiry){
@@ -49,11 +49,11 @@ export class AuthService {
             )
       }
     }
-    return of(JSON.parse(JSON.stringify(localStorage.getItem(this._authFlag))));
+    return of(JSON.parse(JSON.stringify(this.getLocalStorageItem(this._authFlag))));
   }
 
   authorize(code:any) {
-    localStorage.setItem('access_code', code);
+    this.addOrRemoveLocalStorage('access_code', code);
   }
 
   getAccessToken(grantType:string):Observable<any> {
@@ -63,9 +63,9 @@ export class AuthService {
     }
     let envParams: { [key: string]: any } = environment.access;
     envParams.grant_type = grantType;
-    envParams.code = localStorage.getItem('access_code');
+    envParams.code = this.getLocalStorageItem('access_code');
     if(grantType == "refresh_token"){
-      envParams.refresh_token = localStorage.getItem("refresh_token");
+      envParams.refresh_token = this.getLocalStorageItem("refresh_token");
       delete envParams.code;
       delete envParams.redirect_uri;
     }
@@ -75,21 +75,21 @@ export class AuthService {
   }
 
   setAuthorization(data: any){
-    localStorage.setItem('access_token', data.access_token);
-    localStorage.setItem('expires_in', data.expires_in);
-    localStorage.setItem('refresh_token', data.refresh_token);
-    localStorage.setItem('refresh_token_expires_in', data.refresh_token_expires_in);
-    localStorage.setItem('token_type', data.token_type);
-    localStorage.setItem(this._authFlag, JSON.stringify(true));
+    this.addOrRemoveLocalStorage('access_token', data.access_token);
+    this.addOrRemoveLocalStorage('expires_in', data.expires_in);
+    this.addOrRemoveLocalStorage('refresh_token', data.refresh_token);
+    this.addOrRemoveLocalStorage('refresh_token_expires_in', data.refresh_token_expires_in);
+    this.addOrRemoveLocalStorage('token_type', data.token_type);
+    this.addOrRemoveLocalStorage(this._authFlag, JSON.stringify(true));
   }
 
   clearSession() {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('expires_in');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('refresh_token_expires_in');
-    localStorage.removeItem('token_type');
-    localStorage.removeItem('access_code');
+    this.addOrRemoveLocalStorage('access_token');
+    this.addOrRemoveLocalStorage('expires_in');
+    this.addOrRemoveLocalStorage('refresh_token');
+    this.addOrRemoveLocalStorage('refresh_token_expires_in');
+    this.addOrRemoveLocalStorage('token_type');
+    this.addOrRemoveLocalStorage('access_code');
   }
 
   navigateToLogin(){
@@ -102,7 +102,17 @@ export class AuthService {
 
   logout():Observable<any> {
     this.clearSession();
-    localStorage.setItem(this._authFlag, JSON.stringify(false));
+    this.addOrRemoveLocalStorage(this._authFlag, JSON.stringify(false));
     return of(true);
+  }
+
+  getLocalStorageItem(key: any) {
+    return localStorage.getItem(key);
+  }
+  addOrRemoveLocalStorage(key: any, value: any = null) {
+    if(value)
+      localStorage.setItem(key, value);
+    else
+      localStorage.removeItem(key);
   }
 }

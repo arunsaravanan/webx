@@ -15,6 +15,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AuthInterceptor } from './services/auth.interceptor';
 import { TimeagoModule } from 'ngx-timeago';
 import { FormsModule } from '@angular/forms';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { FormsModule } from '@angular/forms';
     StoreModule.forRoot(appReducer),
     EffectsModule.forRoot(appEffects),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    TimeagoModule.forRoot()
+    TimeagoModule.forRoot(),
+    ToastrModule.forRoot()
   ],
   providers: [
     {

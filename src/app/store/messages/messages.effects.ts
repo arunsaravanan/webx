@@ -3,15 +3,22 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { MessagesService } from "./../../services/messages.service";
 import { MessagesActions, MessagesActionTypes } from ".";
 import * as fromMessageActions from './messages.actions';
-import { first, map, mapTo, switchMap, tap } from "rxjs/operators";
+import { catchError, map, switchMap } from "rxjs/operators";
 import * as fromSpinnerActions from './../spinner/spinner.actions';
 import * as fromStore from './../index';
-import { select, State, Store } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { selectedActiveRoom } from "../rooms";
+import { ToastrService } from "ngx-toastr";
+import { Observable } from "rxjs";
 
 @Injectable()
 export class MessagesEffects {
-    constructor(private store: Store<fromStore.State>, private actions$: Actions<MessagesActions>, private messagesService: MessagesService) { }
+    constructor(
+        private store: Store<fromStore.State>,
+        private actions$: Actions<MessagesActions>,
+        private messagesService: MessagesService,
+        private toastr: ToastrService
+    ) { }
 
     getMessages$ = createEffect(
         () =>
@@ -43,6 +50,7 @@ export class MessagesEffects {
                                     .select(selectedActiveRoom)
                                     .pipe(
                                         map((value) => {
+                                            this.toastr.success('Message sent successfully!', 'Webex Messages', { closeButton: true });
                                             return new fromMessageActions.GetMessages({ room: value })
                                         })
                                     ))
@@ -64,6 +72,7 @@ export class MessagesEffects {
                                     .select(selectedActiveRoom)
                                     .pipe(
                                         map((value) => {
+                                            this.toastr.success('Message deleted successfully!', 'Webex Messages', { closeButton: true });
                                             return new fromMessageActions.GetMessages({ room: value })
                                         })
                                     ))

@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { of } from "rxjs";
-import { map, switchMap, tap } from "rxjs/operators";
+import { switchMap } from "rxjs/operators";
 import { RoomsService } from "./../../services/rooms.service";
 import * as fromMessageActions from "./../messages/messages.actions";
 import * as fromRoomsActions from './rooms.actions';
@@ -25,15 +24,4 @@ export class RoomsEffects {
                 ])
             )
     );
-
-    /*  getRoomsCompleted$ = createEffect(
-         () =>
-             this.actions$.pipe(
-                 ofType(RoomsActionTypes.GetRoomsCompleted),
-                 tap(() => {
-                     return new fromMessageActions.GetMessages()
-                 })
-             ),
-             {dispatch: false}
-     ); */
 }

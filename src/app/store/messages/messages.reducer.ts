@@ -18,6 +18,8 @@ export function messagesReducer(state = initialMessagesState, action: MessagesAc
             return {...state, messages: action.payload.messages.items};
         case MessagesActionTypes.CreateMessage:
             return state;
+        case MessagesActionTypes.DeleteMessage:
+            return state;
         default:
             return state;
     }

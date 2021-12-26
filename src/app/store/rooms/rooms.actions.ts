@@ -20,12 +20,7 @@ export class CreateRoom implements Action {
     readonly type = RoomsActionTypes.CreateRoom;
 }
 
-export class CreateRoomCompleted implements Action {
-    readonly type = RoomsActionTypes.CreateRoomCompleted;
-}
-
 export type RoomsActions = 
   | GetRooms
   | GetRoomsCompleted
-  | CreateRoom 
-  | CreateRoomCompleted;
+  | CreateRoom;

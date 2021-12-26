@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { of } from "rxjs";
-import { catchError, map, concatMap, tap, exhaustMap, switchMap } from 'rxjs/operators';
+import { catchError, map, tap, switchMap } from 'rxjs/operators';
 import { AuthActions } from ".";
 import { AuthActionTypes } from "./auth.actions";
 import * as fromAuthActions from "./auth.actions";
@@ -51,25 +51,6 @@ export class AuthEffects {
                         : of(new fromAuthActions.LogoutCompleted))
             )
     );
-
-    /* loginSuccess$ = createEffect(
-        () =>
-            this.actions$.pipe(
-                ofType(AuthActionTypes.LoginSuccess),
-                switchMap(() =>
-                    this.authService
-                        .getAccessToken("authorization_code")
-                        .pipe(map(result => {
-                            this.authService.setAuthorization(result);
-                            return new fromAuthActions.LoginCompleted({ isLoggedIn: true })
-                        }),
-                            catchError((error) => {
-                                this.authService.logout();
-                                return of(new fromAuthActions.LoginFailure(error))
-                            }))
-                )
-            )
-    ) */
 
     loginComplete$ = createEffect(
         () =>

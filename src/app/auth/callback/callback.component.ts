@@ -44,7 +44,6 @@ export class CallbackComponent implements OnInit {
           this.store.dispatch(new LoginCompleted({ isLoggedIn: true }));
         }
       )
-      //this.store.dispatch(new LoginSuccess());
     }
   }
 

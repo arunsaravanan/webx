@@ -1,11 +1,11 @@
-import { AfterViewChecked, Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { AfterViewChecked, Component, OnChanges, OnInit, Sanitizer, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Logout } from '../store/auth';
 import { Spinner } from '../store/spinner';
 import { CreateMessage, DeleteMessage, selectedMessages } from '../store/messages';
 import * as fromStore from './../store';
 import { ToastrService } from 'ngx-toastr';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-messages',
@@ -20,7 +20,7 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
   textMessage: string = "";
   constructor(
       private store: Store<fromStore.State>,
-      private router: Router,
+      private sanitizer: DomSanitizer,
       private toastr: ToastrService
     ) { }
 
@@ -32,7 +32,6 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
     this.scrollToBottom();
     //this.toastr.success('Logged in successfully!', 'Webex Messages', { closeButton: true });
   }
-
   createMessage() {
     if (this.textMessage != "") {
       this.store.dispatch(new Spinner({ isLoading: true }));
@@ -56,19 +55,23 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
 
   onScroll() {
     let element = this.scrollContainer.nativeElement;
+    console.log(element.scrollHeight,element.scrollTop,element.clientHeight);
     let atBottom = element.scrollHeight - element.scrollTop === element.clientHeight
-    if (this.disableScrollDown && atBottom) {
+    console.log('atBottom: ', atBottom);
+    this.disableScrollDown = !atBottom;
+    /* if (this.disableScrollDown && atBottom) {
       this.disableScrollDown = false
     } else {
       this.disableScrollDown = true
-    }
+    } */
   }
   scrollToBottom(): void {
+    this.onScroll();
     if (this.disableScrollDown) {
       return
     }
     try {
-      this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
+      this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight -  this.scrollContainer.nativeElement.clientHeight;
     } catch (err) { }
   }
 

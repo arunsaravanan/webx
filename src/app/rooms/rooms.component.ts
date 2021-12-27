@@ -22,7 +22,6 @@ export class RoomsComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(new Spinner({isLoading: true}));
-    console.log('previous URL', this.previousRouteService.getPreviousUrl());
     if(this.previousRouteService.getPreviousUrl() == '/messages')
     {
       this.store.dispatch(new AuthCheck());

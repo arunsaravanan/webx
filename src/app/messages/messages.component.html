@@ -14,8 +14,8 @@
         <ul class="m-b-0">
             <ng-container *ngIf="messages$ | async as messages">
                 <li *ngFor="let message of messages" class="clearfix">
-                    <div class="badge bg-secondary message-data float-right">
-                        {{message.personEmail}}
+                    <div class="message-data float-right">
+                        {{message.personEmail}} <span class="fa fa-user-circle"></span>
                     </div>
                     <div class="message other-message float-right" (click)="deleteMessage(message)">{{message.text}}
                     </div>

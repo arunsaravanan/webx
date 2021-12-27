@@ -9,7 +9,7 @@ import * as fromStore from './../index';
 import { Store } from "@ngrx/store";
 import { selectedActiveRoom } from "../rooms";
 import { ToastrService } from "ngx-toastr";
-import { Observable } from "rxjs";
+import { Observable, of, throwError } from "rxjs";
 
 @Injectable()
 export class MessagesEffects {
@@ -31,7 +31,12 @@ export class MessagesEffects {
                             switchMap((messages) => [
                                 new fromSpinnerActions.Spinner({ isLoading: false }),
                                 new fromMessageActions.GetMessagesCompleted({ messages })
-                            ])
+                            ]),
+                            catchError((error) => {
+                                this.store.dispatch(new fromSpinnerActions.Spinner({ isLoading: false }));
+                                this.toastr.error(error.error.message, 'Get messages failed!', {closeButton: true});
+                                return throwError(error);
+                            })
                         )
                 )
             )
@@ -53,7 +58,12 @@ export class MessagesEffects {
                                             this.toastr.success('Message sent successfully!', 'Webex Messages', { closeButton: true });
                                             return new fromMessageActions.GetMessages({ room: value })
                                         })
-                                    ))
+                                    )),
+                                    catchError((error) => {
+                                        this.store.dispatch(new fromSpinnerActions.Spinner({ isLoading: false }));
+                                        this.toastr.error(error.error.message, 'Create Webex Message failed!', {closeButton: true});
+                                        return throwError(error);
+                                    })
                         )
                 )
             )
@@ -75,7 +85,12 @@ export class MessagesEffects {
                                             this.toastr.success('Message deleted successfully!', 'Webex Messages', { closeButton: true });
                                             return new fromMessageActions.GetMessages({ room: value })
                                         })
-                                    ))
+                                    )),
+                                    catchError((error) => {
+                                        this.store.dispatch(new fromSpinnerActions.Spinner({ isLoading: false }));
+                                        this.toastr.error(error.error.message, 'Delete Webex Message failed!', {closeButton: true});
+                                        return throwError(error);
+                                    })
                         )
                 )
             )

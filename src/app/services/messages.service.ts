@@ -26,7 +26,6 @@ export class MessagesService {
     body.text = message;
     this.store.select(selectedActiveRoom).pipe(first())
     .subscribe(value => {
-      console.log(value);
       body.roomId = value.id;
     });
     return this.http

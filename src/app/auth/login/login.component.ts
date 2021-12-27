@@ -5,6 +5,8 @@ import { Login } from './../../store/auth';
 import { AuthService } from './../../services/auth.service';
 import * as fromStore from './../../store';
 import { environment } from 'src/environments/environment';
+import { PreviousRouteService } from 'src/app/services/previous.route.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -17,13 +19,16 @@ export class LoginComponent implements OnInit {
   constructor
   (
     private store:Store<fromStore.State>,
-    private router:Router,
-    private authService: AuthService
+    private previousRouteService:PreviousRouteService,
+    private authService: AuthService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
     if(this.authService.isLoggedIn)
       this.authService.navigateToMessages();
+    if(this.previousRouteService.getPreviousUrl() == '/messages')
+      this.toastr.success('Logged out successfully!', 'Webex Messages', { closeButton: true });                                
   }
 
   submit(){

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { LoginSuccess, LoginCompleted } from './../../store/auth';
+import { LoginCompleted } from './../../store/auth';
 import { AuthService } from './../../services/auth.service';
 import * as fromStore from './../../store';
-import { selectAuthState } from './../../store/auth';
 import { Spinner } from './../../store/spinner';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-callback',
@@ -18,7 +18,8 @@ export class CallbackComponent implements OnInit {
     (
       private store: Store<fromStore.State>,
       private route: ActivatedRoute,
-      private authService: AuthService
+      private authService: AuthService,
+      private toastr: ToastrService
     ) { }
 
   ngOnInit(): void {
@@ -42,6 +43,11 @@ export class CallbackComponent implements OnInit {
         (result) => {
           this.authService.setAuthorization(result);
           this.store.dispatch(new LoginCompleted({ isLoggedIn: true }));
+        },
+        (error) => {
+          this.store.dispatch(new Spinner({ isLoading: false }));
+          this.toastr.error(error.error.message, 'Get access token failed!', {closeButton: true});
+          this.authService.navigateToLogin();
         }
       )
     }

@@ -7,6 +7,7 @@ import { AuthActions } from ".";
 import { AuthActionTypes } from "./auth.actions";
 import * as fromAuthActions from "./auth.actions";
 import { AuthService } from "./../../services/auth.service";
+import { ToastrService } from "ngx-toastr";
 
 @Injectable()
 export class AuthEffects {
@@ -14,7 +15,8 @@ export class AuthEffects {
     constructor(
         private actions$: Actions<AuthActions>,
         private authService: AuthService,
-        private router: Router
+        private router: Router,
+        private toastr: ToastrService
     ) { }
 
     login$ = createEffect(
@@ -68,7 +70,7 @@ export class AuthEffects {
                     this.authService
                         .logout()
                         .pipe(
-                            map((value) => {
+                            map(() => {
                                 return new fromAuthActions.LogoutCompleted()
                             })
                         )

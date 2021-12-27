@@ -12,7 +12,7 @@ export class RoomsService {
 
   getRooms(){
     return this.http
-      .get(API_BASE_URL+GET_TEAMS_URL)
+      .get(`${API_BASE_URL}${GET_TEAMS_URL}`)
       .pipe(mergeMap((res:any) => this.http.get(`${API_BASE_URL}${GET_ROOMS_URL}?teamId=${res.items[0].id}`)));
   }
 }

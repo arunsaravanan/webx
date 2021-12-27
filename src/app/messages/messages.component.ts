@@ -30,7 +30,7 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
 
     this.messages$ = this.store.pipe(select(fromStore.selectedMessages));
     this.scrollToBottom();
-    this.toastr.success('Logged in successfully!', 'Webex Messages', { closeButton: true });
+    //this.toastr.success('Logged in successfully!', 'Webex Messages', { closeButton: true });
   }
 
   createMessage() {
@@ -42,7 +42,6 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
   }
 
   deleteMessage(message: any) {
-    console.log(message);
     this.store.dispatch(new Spinner({ isLoading: true }));
     this.store.dispatch(new DeleteMessage({ message: message }));
   }

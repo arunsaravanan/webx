@@ -17,8 +17,7 @@
                     <div class="message-data float-right">
                         {{message.personEmail}} <span class="fa fa-user-circle"></span>
                     </div>
-                    <div class="message other-message float-right" (click)="deleteMessage(message)">{{message.text}}
-                    </div>
+                    <div class="message other-message float-right" [innerHTML]="message.html || message.text | dompurify" (click)="deleteMessage(message)"></div>
                     <div class="message-data text-right">
                         <span class="message-data-time float-right">{{message.created | timeago}}</span>
                     </div>

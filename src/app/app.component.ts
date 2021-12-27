@@ -10,13 +10,7 @@ import { AuthCheck, selectAuthState, spinnerState } from './store';
 })
 export class AppComponent {
   title = 'Web Squad';
-  constructor
-  (
-    private store:Store<fromStore.State>
-  ) { }
+  constructor() {}
 
-  isLoading$ = this.store.select(spinnerState);
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }

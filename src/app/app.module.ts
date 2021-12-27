@@ -17,6 +17,7 @@ import { AuthInterceptor } from './services/auth.interceptor';
 import { TimeagoModule } from 'ngx-timeago';
 import { FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
+import { NgDompurifyModule } from '@tinkoff/ng-dompurify';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { ToastrModule } from 'ngx-toastr';
     EffectsModule.forRoot(appEffects),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     TimeagoModule.forRoot(),
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    NgDompurifyModule
   ],
   providers: [
     {

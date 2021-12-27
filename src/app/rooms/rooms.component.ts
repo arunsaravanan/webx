@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { GetRooms, selectedRooms } from '../store/rooms';
 import * as fromStore from './../store';
-import { Spinner } from '../store/spinner';
+import { Spinner, spinnerState } from '../store/spinner';
 import { AuthCheck } from './../store/auth';
 import { PreviousRouteService } from '../services/previous.route.service';
 
@@ -19,6 +19,7 @@ export class RoomsComponent implements OnInit {
     ) { }
 
   rooms$ = this.store.select(selectedRooms);
+  isLoading$ = this.store.select(spinnerState);
 
   ngOnInit(): void {
     this.store.dispatch(new Spinner({isLoading: true}));

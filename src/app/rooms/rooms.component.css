@@ -4,3 +4,6 @@
     left: 49%;
     z-index: 1;
 }
+.input-group-append {
+    width: min-content;
+}

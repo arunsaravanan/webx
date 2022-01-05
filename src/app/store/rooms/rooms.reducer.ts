@@ -18,6 +18,8 @@ export function roomsReducer(state = initialRoomsState, action: RoomsActions):Ro
             return state;
         case RoomsActionTypes.GetRoomsCompleted:
             return {...state, rooms: action.payload.rooms, activeRoom: action.payload.rooms[0]};
+        case RoomsActionTypes.SelectRoom:
+                return {...state, activeRoom: action.payload.room};
         default:
             return state;
     }

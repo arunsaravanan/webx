@@ -13,6 +13,9 @@
     <div #scrollContent (scroll)="onScroll()" class="chat-history">
         <ul class="m-b-0">
             <ng-container *ngIf="messages$ | async as messages">
+                <div class="no-msg" *ngIf="messages.length == 0">
+                    No messages to show
+                </div>
                 <li *ngFor="let message of messages" class="clearfix">
                     <div class="message-data float-right">
                         {{message.personEmail}} <span class="fa fa-user-circle"></span>

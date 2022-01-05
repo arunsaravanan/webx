@@ -16,9 +16,14 @@ export class MessagesService {
     private store: Store<fromStore.State>
   ) { }
 
-  getMessages(room: any) {
+  getMessages() {
+    let roomId;
+    this.store.select(selectedActiveRoom).pipe(first())
+    .subscribe(value => {
+      roomId = value.id;
+    });
     return this.http
-      .get(`${API_BASE_URL + GET_MESSAGES_URL}?roomId=${room.id}`);
+      .get(`${API_BASE_URL + GET_MESSAGES_URL}?roomId=${roomId}`);
   }
 
   createMessage(message: any) {

@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { MessagesService } from "./../../services/messages.service";
 import { MessagesActions, MessagesActionTypes } from ".";
 import * as fromMessageActions from './messages.actions';
-import { catchError, map, switchMap } from "rxjs/operators";
+import { catchError, first, map, switchMap } from "rxjs/operators";
 import * as fromSpinnerActions from './../spinner/spinner.actions';
 import * as fromStore from './../index';
 import { Store } from "@ngrx/store";
@@ -24,9 +24,9 @@ export class MessagesEffects {
         () =>
             this.actions$.pipe(
                 ofType(MessagesActionTypes.GetMessages),
-                switchMap((data) =>
+                switchMap(() =>
                     this.messagesService
-                        .getMessages(data.payload.room)
+                        .getMessages()
                         .pipe(
                             switchMap((messages) => [
                                 new fromSpinnerActions.Spinner({ isLoading: false }),
@@ -34,7 +34,7 @@ export class MessagesEffects {
                             ]),
                             catchError((error) => {
                                 this.store.dispatch(new fromSpinnerActions.Spinner({ isLoading: false }));
-                                this.toastr.error(error.error.message, 'Get messages failed!', {closeButton: true});
+                                this.toastr.error(error.error.message, 'Get messages failed!', { closeButton: true });
                                 return throwError(error);
                             })
                         )
@@ -46,24 +46,21 @@ export class MessagesEffects {
         () =>
             this.actions$.pipe(
                 ofType(MessagesActionTypes.CreateMessage),
+                first(),
                 switchMap((data) =>
                     this.messagesService
                         .createMessage(data.payload.message)
                         .pipe(
-                            switchMap(() =>
-                                this.store
-                                    .select(selectedActiveRoom)
-                                    .pipe(
-                                        map((value) => {
-                                            this.toastr.success('Message sent successfully!', 'Webex Messages', { closeButton: true });
-                                            return new fromMessageActions.GetMessages({ room: value })
-                                        })
-                                    )),
-                                    catchError((error) => {
-                                        this.store.dispatch(new fromSpinnerActions.Spinner({ isLoading: false }));
-                                        this.toastr.error(error.error.message, 'Create Webex Message failed!', {closeButton: true});
-                                        return throwError(error);
-                                    })
+                            map(() => {
+                                this.toastr.success('Message sent successfully!', 'Webex Messages', { closeButton: true });
+                                return new fromMessageActions.GetMessages()
+
+                            }),
+                            catchError((error) => {
+                                this.store.dispatch(new fromSpinnerActions.Spinner({ isLoading: false }));
+                                this.toastr.error(error.error.message, 'Create Webex Message failed!', { closeButton: true });
+                                return throwError(error);
+                            })
                         )
                 )
             )
@@ -77,20 +74,15 @@ export class MessagesEffects {
                     this.messagesService
                         .deleteMessage(data.payload.message)
                         .pipe(
-                            switchMap(() =>
-                                this.store
-                                    .select(selectedActiveRoom)
-                                    .pipe(
-                                        map((value) => {
-                                            this.toastr.success('Message deleted successfully!', 'Webex Messages', { closeButton: true });
-                                            return new fromMessageActions.GetMessages({ room: value })
-                                        })
-                                    )),
-                                    catchError((error) => {
-                                        this.store.dispatch(new fromSpinnerActions.Spinner({ isLoading: false }));
-                                        this.toastr.error(error.error.message, 'Delete Webex Message failed!', {closeButton: true});
-                                        return throwError(error);
-                                    })
+                            map(() => {
+                                this.toastr.success('Message deleted successfully!', 'Webex Messages', { closeButton: true });
+                                return new fromMessageActions.GetMessages()
+                            }),
+                            catchError((error) => {
+                                this.store.dispatch(new fromSpinnerActions.Spinner({ isLoading: false }));
+                                this.toastr.error(error.error.message, 'Delete Webex Message failed!', { closeButton: true });
+                                return throwError(error);
+                            })
                         )
                 )
             )

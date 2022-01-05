@@ -1,24 +1,39 @@
 <div class="container">
-    <div class="row clearfix">
-      <div class="col-lg-12">
-        <div class="card chat-app">
-          <div id="plist" class="people-list">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <h3>Webex Rooms</h3>
-              </div>
+  <div class="row clearfix">
+    <div class="col-lg-12">
+      <div class="card chat-app">
+        <div id="plist" class="people-list">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <h3>Webex Rooms</h3>
             </div>
-            <ul class="list-unstyled chat-list mt-2 mb-0">
-              <ng-container *ngIf="rooms$ | async as rooms">
-                <li class="clearfix active" *ngFor="let room of rooms">
-                  <!-- <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar"> -->
-                  <div class="about">
-                    <div class="name">{{room.title}}</div>
-                    <div class="status"> <i class="fa fa-circle offline"></i> {{ room.lastActivity | timeago:true }} </div>
-                  </div>
-                </li>
+          </div>
+          <ul class="list-unstyled chat-list mt-2 mb-0">
+            <li class="clearfix">
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" [(ngModel)]="roomName" (keyup.enter)="createRoom()"
+                  placeholder="Enter title here...">
+                <div class="input-group-append">
+                  <button class="btn btn-secondary" (click)="createRoom()" type="button">Create Room</button>
+                </div>
+              </div>
+            </li>
+            <ng-container *ngIf="{rooms: rooms$ | async, selectedRoom: selectedRoom$ | async} as list">
+              <ng-container *ngIf="list.rooms && list.selectedRoom">
+                <ng-container *ngFor="let room of list.rooms; let i = index">
+                  <li class="clearfix" [ngClass]="room.id == list.selectedRoom.id ? 'active' : ''"
+                    (click)="selectRoom(room)">
+                    <!-- <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar"> -->
+                    <div class="about">
+                      <div class="name">{{room.title}}</div>
+                      <div class="status"> <i class="fa fa-circle offline"></i> {{ room.lastActivity | timeago:true }}
+                      </div>
+                    </div>
+                  </li>
+                </ng-container>
               </ng-container>
-              <!-- <li class="clearfix">
+            </ng-container>
+            <!-- <li class="clearfix">
                 <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar">
                 <div class="about">
                   <div class="name">Vincent Porter</div>
@@ -60,13 +75,13 @@
                   <div class="status"> <i class="fa fa-circle offline"></i> offline since Oct 28 </div>
                 </div>
               </li>-->
-            </ul> 
-          </div>
-          <app-messages></app-messages>
+          </ul>
         </div>
+        <app-messages></app-messages>
       </div>
     </div>
   </div>
+</div>
 
 
 <div *ngIf="isLoading$ | async" class="spinner-border" role="status">

@@ -9,7 +9,6 @@ export enum MessagesActionTypes {
 
 export class GetMessages implements Action {
     readonly type = MessagesActionTypes.GetMessages;
-    constructor(public payload: { room: any }) { }
 }
 
 export class GetMessagesCompleted implements Action {

@@ -37,7 +37,7 @@ export class RoomsComponent implements OnInit {
   }
 
   createRoom() {
-    if (this.roomName !== "") {
+    if (this.roomName != undefined && this.roomName !== "") {
       //console.log(this.roomName);
       this.store.dispatch(new Spinner({ isLoading: true }));
       this.store.dispatch(new CreateRoom({ title: this.roomName }));

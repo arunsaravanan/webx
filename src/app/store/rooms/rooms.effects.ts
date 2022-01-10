@@ -9,7 +9,7 @@ import { RoomsActionTypes, RoomsActions } from './rooms.actions';
 import * as fromStore from './../index';
 import { Store } from "@ngrx/store";
 import { ToastrService } from "ngx-toastr";
-import { throwError } from "rxjs";
+import { EMPTY, Observable, throwError } from "rxjs";
 import { selectedActiveRoom } from ".";
 
 @Injectable()
@@ -31,13 +31,19 @@ export class RoomsEffects {
                 ),
                 catchError((error) => {
                     this.store.dispatch(new fromSpinnerActions.Spinner({ isLoading: false }));
-                    this.toastr.error(error.error.message, 'Get Rooms failed!', { closeButton: true });
+                    this.toastr.error(error, 'Get Rooms failed!', { closeButton: true });
                     return throwError(error);
                 }),
-                switchMap((data: any) => [
-                    new fromRoomsActions.GetRoomsCompleted({ rooms: data.items }),
-                    new fromMessageActions.GetMessages()
-                ])
+                switchMap((data: any) => {
+                    if (data.items.length > 0) {
+                        return [new fromRoomsActions.GetRoomsCompleted({ rooms: data.items }),
+                        new fromMessageActions.GetMessages()]
+                    } else {
+                        this.store.dispatch(new fromSpinnerActions.Spinner({ isLoading: false }));
+                        this.toastr.error('No rooms available!', 'Webex Messages', { closeButton: true })
+                    }
+                    return EMPTY;
+                })
             )
     );
     createRoom$ = createEffect(

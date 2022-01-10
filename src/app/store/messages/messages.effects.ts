@@ -46,7 +46,7 @@ export class MessagesEffects {
         () =>
             this.actions$.pipe(
                 ofType(MessagesActionTypes.CreateMessage),
-                first(),
+                
                 switchMap((data) =>
                     this.messagesService
                         .createMessage(data.payload.message)

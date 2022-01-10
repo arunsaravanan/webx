@@ -5,6 +5,7 @@ import { first, mergeMap } from 'rxjs/operators';
 import { API_BASE_URL, CREATE_ROOM_URL, GET_ROOMS_URL, GET_TEAMS_URL } from './api.config';
 import { selectedActiveRoom } from '../store/rooms';
 import * as fromStore from './../store';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,23 +13,33 @@ import * as fromStore from './../store';
 export class RoomsService {
 
   constructor(
-    private http:HttpClient,
+    private http: HttpClient,
     private store: Store<fromStore.State>
-    ) { }
+  ) { }
 
-  getRooms(){
+  getRooms() {
     return this.http
       .get(`${API_BASE_URL}${GET_TEAMS_URL}`)
-      .pipe(mergeMap((res:any) => this.http.get(`${API_BASE_URL}${GET_ROOMS_URL}?teamId=${res.items[0].id}`)));
+      .pipe(mergeMap((res: any) => {
+        if (res.items.length > 0)
+          return this.http.get(`${API_BASE_URL}${GET_ROOMS_URL}?teamId=${res.items[0].id}`);
+        return of({ items: [] });
+      }));
   }
   createRoom(title: any) {
     let body: any = {};
-    body.title = title;
     this.store.select(selectedActiveRoom).pipe(first())
-    .subscribe(value => {
-      body.teamId = value.teamId;
-    });
-    return this.http
-      .post(`${API_BASE_URL + CREATE_ROOM_URL}`, body);
+      .subscribe(value => {
+        body.teamId = value.teamId;
+      });
+    if (body.teamId) {
+      body.title = title;
+      return this.http
+        .post(`${API_BASE_URL + CREATE_ROOM_URL}`, body);
+    } else {
+      body.name = title;
+      return this.http
+        .post(`${API_BASE_URL + GET_TEAMS_URL}`, body);
+    }
   }
 }

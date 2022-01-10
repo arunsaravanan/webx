@@ -14,7 +14,7 @@
                 <input type="text" class="form-control" [(ngModel)]="roomName" (keyup.enter)="createRoom()"
                   placeholder="Enter title here...">
                 <div class="input-group-append">
-                  <button class="btn btn-secondary" (click)="createRoom()" type="button">Create Room</button>
+                  <button class="btn btn-secondary" [disabled]="!roomName" (click)="createRoom()" type="button">Create Room</button>
                 </div>
               </div>
             </li>

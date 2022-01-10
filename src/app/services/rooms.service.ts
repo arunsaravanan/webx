@@ -30,7 +30,7 @@ export class RoomsService {
     let body: any = {};
     this.store.select(selectedActiveRoom).pipe(first())
       .subscribe(value => {
-        body.teamId = value.teamId;
+        body.teamId = value && value.teamId ? value.teamId : null;
       });
     if (body.teamId) {
       body.title = title;

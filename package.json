@@ -27,7 +27,7 @@
     "@tinkoff/ng-dompurify": "^3.0.0",
     "dompurify": "^2.3.4",
     "ngx-timeago": "^2.0.0",
-    "ngx-toastr": "^14.2.1",
+    "ngx-toastr": "^14.2.2",
     "rxjs": "~6.6.0",
     "ts-node": "^10.4.0",
     "tslib": "^2.3.0",
